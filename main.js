@@ -32,3 +32,47 @@ function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.classList.remove('show');
 }
+
+// Get form elements
+const contactForm = document.querySelector('.contact-form');
+
+contactForm.addEventListener('submit', (e) => {
+
+  // Prevent default submission
+  e.preventDefault();
+
+  // Create XHR object
+  const xhr = new XMLHttpRequest();
+
+  // Setup request
+  xhr.open('POST', url + '/send_email');
+  
+  // Set headers
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  // Handle response
+  xhr.onload = function() {
+    if(xhr.status === 200) {
+      // Success response
+    } else {
+      // Error response
+    }
+  }
+
+  // Handle errors    
+  xhr.onerror = function() {
+    // Network error
+  }
+
+  // Create FormData
+  const data = new FormData();
+
+  // Append data 
+  data.append('name', name);
+  data.append('email', email);
+  data.append('message', message);
+
+  // Send request
+  xhr.send(data);
+
+});
