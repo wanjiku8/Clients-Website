@@ -33,46 +33,44 @@ function closeMenu() {
     navLinks.classList.remove('show');
 }
 
-// Get form elements
+
+// Backend API URL
+const apiUrl = "https://clients-website-api.vercel.app";
+
+// Selecting the contact form and its input elements
 const contactForm = document.querySelector('.contact-form');
+const nameInput = contactForm.querySelector('input[type="text"]');
+const emailInput = contactForm.querySelector('input[type="email"]');
+const messageInput = contactForm.querySelector('textarea');
+// const send_btn = document.getElementById('submit')
 
-contactForm.addEventListener('submit', (e) => {
+// Adding a submit event listener to the form
+contactForm.onsubmit =(event) =>{
+  event.preventDefault()  
+  // console.log('Attempting to send rqst',nameInput.value,emailInput.value,messageInput.value)
+   // Example data to send in the request
+    const requestData = {
+        "message": messageInput.value,
+        "name": nameInput.value,
+        "email": emailInput.value 
+    };
 
-  // Prevent default submission
-  e.preventDefault();
+    // Make a POST request to the Flask API endpoint
+    fetch('https://clients-website-api.vercel.app/send_email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Thanks for your feedback!')
+        // Handle the response as needed
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // Handle errors
+    });  
+};
 
-  // Create XHR object
-  const xhr = new XMLHttpRequest();
-
-  // Setup request
-  xhr.open('POST', url + '/send_email');
-  
-  // Set headers
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  // Handle response
-  xhr.onload = function() {
-    if(xhr.status === 200) {
-      // Success response
-    } else {
-      // Error response
-    }
-  }
-
-  // Handle errors    
-  xhr.onerror = function() {
-    // Network error
-  }
-
-  // Create FormData
-  const data = new FormData();
-
-  // Append data 
-  data.append('name', name);
-  data.append('email', email);
-  data.append('message', message);
-
-  // Send request
-  xhr.send(data);
-
-});

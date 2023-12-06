@@ -586,12 +586,12 @@
 
     <section id="contact" class="contact-section">
         <h2>Contact Us</h2>
-        <div class="contact-form">
-            <input type="text" placeholder="Your Name">
-            <input type="email" placeholder="Your Email">
-            <textarea placeholder="Your Message"></textarea>
-            <button type="submit">Send Message</button>
-        </div>
+        <form class="contact-form">
+            <input type="text" id = "name" required placeholder="Your Name">
+            <input type="email" id ="email" required placeholder="Your Email">
+            <textarea id ="message" required placeholder="Your Message"></textarea>
+            <input id = "submit" required value="Send message" type="submit"/>
+        </form>
         <!-- <div id="map" class="map"> -->
         <!-- Embed Google Maps or any other map service -->
         <!-- Example: <iframe src="your_map_embed_code" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe> -->
