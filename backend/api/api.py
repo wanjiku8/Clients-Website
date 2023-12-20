@@ -60,7 +60,8 @@ def send_email():
 def generate_map_html(start_lat, start_lon, end_lat, end_lon):
 
     # Create the map
-    my_map = folium.Map(location=[(start_lat+end_lat)/2, (start_lon+end_lon)/2], zoom_start=5)
+    my_map = folium.Map(location=[(start_lat+end_lat)/2,
+                                  (start_lon+end_lon)/2], zoom_start=5)
 
     # Add start and end location markers
     folium.Marker([start_lat, start_lon], popup='Start').add_to(my_map)
@@ -94,8 +95,10 @@ def locate():
     }
     """
     data :dict = request.get_json()
+    #coords to the start point
     latitude = data['latitude']
     longitude = data['longitude']
+    #fixed end point values
     end_lat = -1.276702
     end_long = 36.811468
     #call the OSM mapping function here
