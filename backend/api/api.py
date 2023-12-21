@@ -106,5 +106,12 @@ def locate():
     return jsonify({"message":{
         "location":generate_map_html(latitude,longitude,end_lat,end_long)
         }})
+@app.get('/categories')
+@cross_origin()
+def show_data():
+    with open("./file-mappings.json") as file:
+        data = json.load(file)
+    
+    return jsonify({"data":data})
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
