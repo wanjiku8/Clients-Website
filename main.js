@@ -34,20 +34,20 @@ function closeMenu() {
 }
 
 
-// Backend API URL
-const apiUrl = "https://clients-website-api.vercel.app";
-
 // Selecting the contact form and its input elements
 const contactForm = document.querySelector('.contact-form');
 const nameInput = contactForm.querySelector('input[type="text"]');
 const emailInput = contactForm.querySelector('input[type="email"]');
-const messageInput = contactForm.querySelector('textarea');
-// const send_btn = document.getElementById('submit')
+const messageInput = contactForm.querySelector('textarea')
+
+const getMapBtn = document.querySelector('#map_button') // get map button
+
+//map box
+const map = document.querySelector('#map')
 
 // Adding a submit event listener to the form
 contactForm.onsubmit =(event) =>{
   event.preventDefault()  
-  // console.log('Attempting to send rqst',nameInput.value,emailInput.value,messageInput.value)
    // Example data to send in the request
     const requestData = {
         "message": messageInput.value,
@@ -55,7 +55,7 @@ contactForm.onsubmit =(event) =>{
         "email": emailInput.value 
     };
 
-    // Make a POST request to the Flask API endpoint
+    // Make a POST request to the API endpoint to send email 
     fetch('https://clients-website-api.vercel.app/send_email', {
         method: 'POST',
         headers: {
@@ -74,3 +74,65 @@ contactForm.onsubmit =(event) =>{
     });  
 };
 
+function get_map(lat,lon){
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "latitude": lat,
+  "longitude": lon
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://clients-website-api.vercel.app/locate", requestOptions)
+  .then(response => response.text())
+  .then(result =>{
+    result = JSON.parse(result)
+    map.innerHTML = result.message.location
+  })
+  .catch(error => console.log('error', error));
+}
+
+getMapBtn.onclick = () => {
+  try {
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+
+    // Pass location to function 
+    get_map(lat, lon);
+
+  });
+
+} catch (error) {
+
+  // Catch any errors
+  let message;
+  
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      message = "User denied the request for Geolocation.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      message = "Location information is unavailable.";
+      break;
+    case error.TIMEOUT:
+      message = "The request to get user location timed out.";
+      break;
+    case error.UNKNOWN_ERROR:
+    default: 
+      message = "An unknown error occurred.";  
+  }
+
+  alert(message);
+
+}
+}
